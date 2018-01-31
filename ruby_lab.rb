@@ -28,6 +28,38 @@ def process_file(file_name)
 	end
 end
 
+def cleanup_title()
+	extract()
+	eliminate()
+
+def extract(songTitle)
+    patt = /<SEP>[\w\s]*$/
+    if patt =~ songTitle
+        newTitle = "#{$&}"
+    end
+    secondPatt = /<SEP>/
+    if secondPatt =~ newTitle
+        finalTitle = "#{$'}"
+    end
+end
+
+def eliminate(songTitle)
+		patt = /<SEP>[\w|\s]((|[|{|\|/|_|-|:|"|`|+|=|\|\ feat.)/
+		if patt =~ songTitle
+        secondTitle = "#{$}"
+    end
+
+    secondPatt = /<SEP>/
+    if secondPatt =~ secondTitle
+        thirdTitle = "#{$'}"
+    end
+
+    thirdPatt = /(\(|\[|\{|\\|\/|\_|\-|\:|\"|\|+|=|*|\ feat.)/
+    if thirdPatt =~ thirdTitle
+        finalTitle = "#{$`}"
+    end
+end
+
 # Executes the program
 def main_loop()
 	puts "CSCI 305 Ruby Lab submitted by #{$name}"
@@ -42,6 +74,8 @@ def main_loop()
 
 	# Get user input
 end
+
+
 
 if __FILE__==$0
 	main_loop()
