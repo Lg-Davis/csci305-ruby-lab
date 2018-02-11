@@ -4,21 +4,75 @@
 #
 # CSCI 305 - Ruby Programming Lab
 #
-# <firstname> <lastname>
-# <email-address>
+# Logan Davis
+# logand222@gmail.com
 #
 ###############################################################
 
 $bigrams = Hash.new # The Bigram data structure
-$name = "<firstname> <lastname>"
+$name = "Logan Davis"
+
+def cleanup_title(songTitle)
+#puts songTitle
+
+#Step 1
+#looking for the third <SEP> three times and then pritning the songTitle after the third <SEP> found
+title = ""
+sep_pattern = /<SEP>/
+
+	if songTitle =~ sep_pattern
+		title = "#{$'}"
+	end
+
+	if title =~ sep_pattern
+		title = "#{$'}"
+	end
+
+	if title =~ sep_pattern
+		title = "#{$'}"
+	end
+
+
+#step2
+sf_pattern = /[(\[\{\\\/_\-:"`+=*]|feat./
+
+	if title =~ sf_pattern
+		title = "#{$`}"
+	end
+
+#step 3
+punc_pattern = /[?¿!¡.;&@%#|]/
+
+	if title =~ punc_pattern
+		title.gsub!(punc_pattern, "") #replace with empty pattern
+	end
+
+
+#step 5
+title.downcase!
+
+return title
+puts title #prints the newest title
+end #end of cleanup_title method
 
 # function to process each line of a file and extract the song titles
 def process_file(file_name)
 	puts "Processing File.... "
 
 	begin
-		IO.foreach(file_name) do |line|
-			# do something for each line
+		if RUBY_PLATFORM.downcase.include? 'mswin'
+			file = File.open(file_name)
+			unless file.eof?
+				file.each_line do |line|
+					# do something for each line (if using windows)
+				end
+			end
+			file.close
+		else
+			IO.foreach(file_name, encoding: "utf-8") do |line|
+				# do something for each line (if using macos or linux)
+				title = cleanup_title(line)
+			end
 		end
 
 		puts "Finished. Bigram model built.\n"
@@ -26,38 +80,6 @@ def process_file(file_name)
 		STDERR.puts "Could not open file"
 		exit 4
 	end
-end
-
-def cleanup_title()
-	extract()
-	eliminate()
-
-def extract(songTitle)
-    patt = /<SEP>[\w\s]*$/
-    if patt =~ songTitle
-        newTitle = "#{$&}"
-    end
-    secondPatt = /<SEP>/
-    if secondPatt =~ newTitle
-        finalTitle = "#{$'}"
-    end
-end
-
-def eliminate(songTitle)
-		patt = /<SEP>[\w|\s]((|[|{|\|/|_|-|:|"|`|+|=|\|\ feat.)/
-		if patt =~ songTitle
-        secondTitle = "#{$}"
-    end
-
-    secondPatt = /<SEP>/
-    if secondPatt =~ secondTitle
-        thirdTitle = "#{$'}"
-    end
-
-    thirdPatt = /(\(|\[|\{|\\|\/|\_|\-|\:|\"|\|+|=|*|\ feat.)/
-    if thirdPatt =~ thirdTitle
-        finalTitle = "#{$`}"
-    end
 end
 
 # Executes the program
@@ -74,8 +96,6 @@ def main_loop()
 
 	# Get user input
 end
-
-
 
 if __FILE__==$0
 	main_loop()
