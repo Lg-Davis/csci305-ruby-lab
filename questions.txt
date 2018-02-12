@@ -1,4 +1,4 @@
-Your name
+Logan Davis
 CSCI-305
 
 10.
@@ -13,12 +13,17 @@ CSCI-305
 
 20.
 
-21.
+21. Something that I did enjoy about ruby was the regular expressions. I have not dealt with regular expressions much before this lab but I found them very
+    interesting and ruby handled them in a efficient and easy way.
 
-22.
+22. 
 
-23.
+23. I enjoyed the early parts of this lab setting up the regex portion but the following steps took me many stressful hours to figure out. One aspect
+    about this lab that I enjoyed was the regex101.com website that was referred to us. It was very convenient to test my regex before implementing it into
+    my code for testing. I could do my own examples to test and see if I would capture all the titles with all the requirements.
 
-24.
+24. I spent roughly 13+ hours on this ruby lab.
 
-25.
+25. Just from what we have learned in lecture and this lab, I can see the power behind the ruby language. I can see myself using this language in the future
+    but not anytime soon out of college unless an employer requires it. With my knowledge on ruby at the moment, I would only handle regular expression
+    projects with ruby. I would use other languages I understand better instead of ruby to solve other projects.

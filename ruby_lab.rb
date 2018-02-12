@@ -9,78 +9,99 @@
 #
 ###############################################################
 
-#Global Variables
 $bigrams = Hash.new # The Bigram data structure
 $name = "Logan Davis"
-$index = 0
-$title
-$titleList = Array.new
+$createTitle = ""
+$createCounter = 0
 
-def cleanup_title(songTitle)
-#puts songTitle
 
 #Step 1
 #looking for the third <SEP> three times and then pritning the songTitle after the third <SEP> found
-title = ""
-sep_pattern = /<SEP>/
+def cleanup_title(songTitle)
 
-	if songTitle =~ sep_pattern
-		title = "#{$'}"
+#puts songTitle
+title = "" 							#setting the varibale title to an empty string
+sep_pattern = /<SEP>/ 	#regular expression pattern catching <SEP> in the song lists given
+
+	if songTitle =~ sep_pattern	#checks for the first <SEP>
+		title = "#{$'}" #sets title to everything after the first <SEP>
 	end
 
-	if title =~ sep_pattern
-		title = "#{$'}"
+	if title =~ sep_pattern	#checks again for the second <SEP>
+		title = "#{$'}" #sets title to everything after the second <SEP>
 	end
 
-	if title =~ sep_pattern
-		title = "#{$'}"
+	if title =~ sep_pattern #checks for the third and final <SEP>
+		title = "#{$'}"	#sets title to everything after the third <SEP> which is just the song title
 	end
 
 
 #step2
-sf_pattern = /[(\[\{\\\/_\-:"`+=*]|feat./
+sf_pattern = /[(\[\{\\\/_\-:"`+=*]|feat./	#pattern to detect superfluous text
 
-	if title =~ sf_pattern
-		title = "#{$`}"
+	if title =~ sf_pattern #if title contains the superfluous pattern
+		title = "#{$`}"	#sets title equal to everything before the superfluous text
 	end
 
 #step 3
-punc_pattern = /[?¿!¡.;&@%#|]/
+punc_pattern = /[?¿!¡.;&@%#|]/	#pattern to detect punctuation in the song description
 
-	if title =~ punc_pattern
-		title.gsub!(punc_pattern, "") #replace with empty pattern
+	if title =~ punc_pattern	#checking if the title contains the punctuation pattern
+		title.gsub!(punc_pattern, "") #replace punctuation found with empty an empty string in title (deleting punctuation found)
 	end
 
-
 #step 5
-title.downcase!
+title.downcase! #makes all characters in title lowercase
 
 return title
-#puts title #prints the newest title (testing purposes)
 end #end of cleanup_title method
 
-#buildBigram method
-def buildBigram(word)
-	$titleList.each do |title|
-		patt = /#{word}/
-		if patt =~ title
-			secondWord = "#{$'}"
-			#$bigrams = {"#{word}": $index}
+#Assembling the Bigram Method
+def assemble_bigram(title)
+	title_array = title.split
+	for i in 0..title_array.length-2
+		$bigrams[title_array[i]]
+		if $bigrams[title_array[i]] == nil
+			$bigrams[title_array[i]] = Hash.new(0)
 		end
-		patt2 = / \w* /
-		if patt2 =~ secondWord
-			killSpaces = "#{$&}"
-		end
-
-		patt3 = /\S\w*\S/
-		if patt3 =~ killSpaces
-			$bigrams["#{$&}"] = $index
-			$index += 1
-		end
+		$bigrams[title_array[i]][title_array[i+1]] += 1
 	end
 end
 
-# function to process each line of a file and extract the song titles
+
+#Most Common Word Method
+def mcw(word)
+	highest_value = 0
+	most_common_key = ""
+	$bigrams[word].each do |key, value|
+		if value > highest_value
+			highest_value = value
+			most_common_key = key
+		end
+	end
+	return most_common_key
+end
+
+#create title method 
+def create_title(start_word)
+		$createTitle << "#{start_word}"
+		$createCounter += 1
+		begin
+			nextWord = mcw(start_word)
+			if($createCounter >= 20)
+				return
+			else
+				create_title(nextWord)
+			end
+		# rescue
+		# 	puts "No next Word"
+	end
+end
+
+
+
+
+#function to process each line of a file and extract the song titles
 def process_file(file_name)
 	puts "Processing File.... "
 
@@ -96,13 +117,11 @@ def process_file(file_name)
 		else
 			IO.foreach(file_name, encoding: "utf-8") do |line|
 				# do something for each line (if using macos or linux)
-				title = cleanup_title(line)
-				#puts title
-				$titleList.push(title)
+				song = cleanup_title(line) #calls the cleanup_title method with the line from the file given
+				assemble_bigram(song)	#calls bigram method with the song variable returned from cleanup_title
+
 			end
-			buildBigram(" love ")
-			puts $bigrams.inspect
-			#puts $bigrams[keys[0]]
+			#puts mcw("love")
 		end
 
 		puts "Finished. Bigram model built.\n"
