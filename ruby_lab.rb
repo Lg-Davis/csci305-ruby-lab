@@ -9,8 +9,12 @@
 #
 ###############################################################
 
+#Global Variables
 $bigrams = Hash.new # The Bigram data structure
 $name = "Logan Davis"
+$index = 0
+$title
+$titleList = Array.new
 
 def cleanup_title(songTitle)
 #puts songTitle
@@ -52,8 +56,29 @@ punc_pattern = /[?¿!¡.;&@%#|]/
 title.downcase!
 
 return title
-puts title #prints the newest title
+#puts title #prints the newest title (testing purposes)
 end #end of cleanup_title method
+
+#buildBigram method
+def buildBigram(word)
+	$titleList.each do |title|
+		patt = /#{word}/
+		if patt =~ title
+			secondWord = "#{$'}"
+			#$bigrams = {"#{word}": $index}
+		end
+		patt2 = / \w* /
+		if patt2 =~ secondWord
+			killSpaces = "#{$&}"
+		end
+
+		patt3 = /\S\w*\S/
+		if patt3 =~ killSpaces
+			$bigrams["#{$&}"] = $index
+			$index += 1
+		end
+	end
+end
 
 # function to process each line of a file and extract the song titles
 def process_file(file_name)
@@ -72,7 +97,12 @@ def process_file(file_name)
 			IO.foreach(file_name, encoding: "utf-8") do |line|
 				# do something for each line (if using macos or linux)
 				title = cleanup_title(line)
+				#puts title
+				$titleList.push(title)
 			end
+			buildBigram(" love ")
+			puts $bigrams.inspect
+			#puts $bigrams[keys[0]]
 		end
 
 		puts "Finished. Bigram model built.\n"
