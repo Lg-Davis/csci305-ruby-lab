@@ -10,9 +10,9 @@
 ###############################################################
 
 $bigrams = Hash.new # The Bigram data structure
-$name = "Logan Davis"
-$createTitle = ""
-$createCounter = 0
+$name = "Logan Davis" #name
+$GLtitle = "" #global - empty title variable
+$GLcounter = 0 #global - counter varibale initialzied to 0
 
 
 #Step 1
@@ -58,27 +58,28 @@ end #end of cleanup_title - method
 
 #Assembling the Bigram - Method
 def assemble_bigram(title)
-	#using a regualar expression to identify the stop words, and then kill the stop word by saving it into a empty string
+	#using a regualar expression to identify the stop words
 	stop_patt = /with\b|to\b|the\b|out\b|or\b|on\b|of\b|in\b|from\b|for\b|by\b|and\b|an\b|a\b/
-	title.gsub!(stop_patt,"")
+	title.gsub!(stop_patt,"")  #kill the stop word by saving it into a empty string
+
 	title_array = title.split
-	for i in 0..title_array.length-2
+	for i in 0..title_array.length-2	#for loop
 		$bigrams[title_array[i]]
-		if $bigrams[title_array[i]] == nil
-			$bigrams[title_array[i]] = Hash.new(0)
+		if $bigrams[title_array[i]] == nil		#if no bigram
+			$bigrams[title_array[i]] = Hash.new(0) #create new bigram
 		end
-		$bigrams[title_array[i]][title_array[i+1]] += 1
+		$bigrams[title_array[i]][title_array[i+1]] += 1	#2D array
 	end
 end
 
 
-#Most Common Word Method
+#Most Common Word - Method
 def mcw(word)
-	highest_value = 0
+	high = 0
 	most_common_key = ""
-	$bigrams[word].each do |key, value|
-		if value > highest_value
-			highest_value = value
+	$bigrams[word].each do |key, val| #check bigrams with word index
+		if val > high 	# "swap" statement if highest vlaue needs replaced
+			high = val
 			most_common_key = key
 		end
 	end
@@ -86,36 +87,36 @@ def mcw(word)
 end
 
 
+#create title - method
 def create_title(starting_word)
-	begin
-		final_title = starting_word
+	begin															#rescue tool for no more words
+		last_title = starting_word
 		length = 0
-		previous = starting_word
-		fix_array = Array.new
+		prev = starting_word
+		fix_array = Array.new	#fix array to solve repeating phrases/words probelm
 
-		while length < 19
+		while length < 20 #max words = 20
 
-			current = mcw(previous)
+			curr = mcw(prev) #next word in sequence
 
-			if(fix_array.include?(current))
+			if(fix_array.include?(curr)) #is the curr word in the fix array
 				break
 			else
-				fix_array.push(current)
+				fix_array.push(curr)	#push new word onto the end of fix array
 			end
 
-
-			if (current != "" && current != nil)
+			if (curr != "" && curr != nil)	#next string has folling word
 				length += 1
-				final_title << " "
-				final_title << current
-				previous = current
+				last_title << " " #concatonate space
+				last_title << curr 	#concatonate curr word
+				prev = curr #reset
 			else
-				length = 19
+				length = 21 #no next word
 			end
-		end
-		return final_title
+		end #end of while
+		return last_title	#return final title
 	rescue
-		return final_title
+		return last_title #return final title in resuce
 	end
 end
 
@@ -142,7 +143,6 @@ def process_file(file_name)
 				assemble_bigram(song)	#calls bigram method with the song variable returned from cleanup_title
 
 			end
-			#puts mcw("love")
 		end
 
 		puts "Finished. Bigram model built.\n"
@@ -166,15 +166,15 @@ def main_loop()
 
 	# Get user input
 	marker = 0
-	while (marker == 0)
-		print "Enter a word [Enter 'q-q' to quit]:"
-		line = STDIN.gets.chomp
-		if line == "q-q"
-			marker = 1
+	while (marker == 0) #while marker is zero, ask for a word, gather input
+		print "Enter a word [Enter '*q*' to quit]:" #renamed quit command because conflict with user input
+		line = STDIN.gets.chomp #user inpui
+		if line == "*q*"
+			marker = 1	#set marker to 1, exit program
 		else
-			$createTitle = ""
-			$createCounter = 0
-			puts create_title(line)
+			$GLtitle = ""		#create a blank new title
+			$GLcounter = 0	#counter initialized to 0
+			puts create_title(line) #calls create_title with line from text file
 		end
 	end
 end
