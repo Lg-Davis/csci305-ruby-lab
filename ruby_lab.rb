@@ -58,6 +58,9 @@ end #end of cleanup_title - method
 
 #Assembling the Bigram - Method
 def assemble_bigram(title)
+	#using a regualar expression to identify the stop words, and then kill the stop word by saving it into a empty string
+	stop_patt = /with\b|to\b|the\b|out\b|or\b|on\b|of\b|in\b|from\b|for\b|by\b|and\b|an\b|a\b/
+	title.gsub!(stop_patt,"")
 	title_array = title.split
 	for i in 0..title_array.length-2
 		$bigrams[title_array[i]]
@@ -82,30 +85,25 @@ def mcw(word)
 	return most_common_key
 end
 
-# #create title method
-# def create_title(start_word)
-# 		$createTitle << "#{start_word}"
-# 		$createCounter += 1
-# 		begin
-# 			nextWord = mcw(start_word)
-# 			if($createCounter >= 20)
-# 				return
-# 			else
-# 				create_title(nextWord)
-# 			end
-# 		# rescue
-# 		# 	puts "No next Word"
-# 	end
-# end
 
 def create_title(starting_word)
 	begin
 		final_title = starting_word
 		length = 0
 		previous = starting_word
+		fix_array = Array.new
 
 		while length < 19
+
 			current = mcw(previous)
+
+			if(fix_array.include?(current))
+				break
+			else
+				fix_array.push(current)
+			end
+
+
 			if (current != "" && current != nil)
 				length += 1
 				final_title << " "
@@ -169,9 +167,9 @@ def main_loop()
 	# Get user input
 	marker = 0
 	while (marker == 0)
-		print "Enter a word [Enter 'q' to quit]:"
+		print "Enter a word [Enter 'q-q' to quit]:"
 		line = STDIN.gets.chomp
-		if line == "q"
+		if line == "q-q"
 			marker = 1
 		else
 			$createTitle = ""

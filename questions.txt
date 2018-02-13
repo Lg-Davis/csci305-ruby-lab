@@ -1,17 +1,29 @@
 Logan Davis
 CSCI-305
 
-10. All the words I seem to try all end up repeating at some point. The words either repeat as "for you ready" or "of the world" 
+10. All the words I seem to try all end up repeating at some point. The words either repeat as "for you ready" or "of the world"
 
-14.
+14. So many of the words end in a repeating pattern because words like "the", "for", "of", etc.... are extremely common in the song titles.
+    Therefore, it would be common to see these words as the "most common word" and then their most common word will be the same thing,
+    ultimately creating a repeating pattern...
 
-15.
+15. After trying many different words in the a_tracks.txt file, I found several that terminate in under 20 words. Some examples are "this", "killer", "them", "catch"
 
-16.
+16. To fix the problem of repeating phrase/word problem, I first created a new array called fix_array. I then checked if the current word was included in that new
+    array. If it was included in the array already, it would break out of the if statement and move along. If it was not included in the array already, I used
+    the ".push" function to add the word onto the end of the new fix_array I created. The new array created will start to fill up with the common repeating words and
+    stop repeating words from happening. This check worked perfectly and got rid of the repeating pattern phrase/word problem we were experiencing in the beginning of
+    this lab.
 
-19.
+17. Starting Word = "montana" --> song title = "montana"
+    This is the same for both files "a_tracks.txt" and "unique_tracks.txt"
 
-20.
+18. Starting Word(a_tracks.txt) = "bob" --> "bob mcgee me down road blues night long way you are"
+    Starting Word(unique_tracks.txt) = "bob" --> "bob long as i want is you ready love"
+
+19. Yes it differs because when there is a tie for the most common word it will randomly select one to output.
+
+20. "america the beautiful"
 
 21. Something that I did enjoy about ruby was the regular expressions. I have not dealt with regular expressions much before this lab but I found them very
     interesting and ruby handled them in a efficient and easy way.
