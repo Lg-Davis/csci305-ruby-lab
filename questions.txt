@@ -1,7 +1,7 @@
 Logan Davis
 CSCI-305
 
-10.
+10. All the words I seem to try all end up repeating at some point. The words either repeat as "for you ready" or "of the world" 
 
 14.
 
@@ -16,7 +16,9 @@ CSCI-305
 21. Something that I did enjoy about ruby was the regular expressions. I have not dealt with regular expressions much before this lab but I found them very
     interesting and ruby handled them in a efficient and easy way.
 
-22. 
+22. I found that ruby has a very steep learning curve, in my opinion. I had lots of trouble with the different syntax that it uses. By the end it was not
+    as big of an issue just through repetition of using it. Most of my coding is done in object oriented programming languages, so this was out of my element
+    and more difficult for me to complete, but I managed.
 
 23. I enjoyed the early parts of this lab setting up the regex portion but the following steps took me many stressful hours to figure out. One aspect
     about this lab that I enjoyed was the regex101.com website that was referred to us. It was very convenient to test my regex before implementing it into

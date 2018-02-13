@@ -54,9 +54,9 @@ punc_pattern = /[?¿!¡.;&@%#|]/	#pattern to detect punctuation in the song desc
 title.downcase! #makes all characters in title lowercase
 
 return title
-end #end of cleanup_title method
+end #end of cleanup_title - method
 
-#Assembling the Bigram Method
+#Assembling the Bigram - Method
 def assemble_bigram(title)
 	title_array = title.split
 	for i in 0..title_array.length-2
@@ -82,19 +82,42 @@ def mcw(word)
 	return most_common_key
 end
 
-#create title method 
-def create_title(start_word)
-		$createTitle << "#{start_word}"
-		$createCounter += 1
-		begin
-			nextWord = mcw(start_word)
-			if($createCounter >= 20)
-				return
+# #create title method
+# def create_title(start_word)
+# 		$createTitle << "#{start_word}"
+# 		$createCounter += 1
+# 		begin
+# 			nextWord = mcw(start_word)
+# 			if($createCounter >= 20)
+# 				return
+# 			else
+# 				create_title(nextWord)
+# 			end
+# 		# rescue
+# 		# 	puts "No next Word"
+# 	end
+# end
+
+def create_title(starting_word)
+	begin
+		final_title = starting_word
+		length = 0
+		previous = starting_word
+
+		while length < 19
+			current = mcw(previous)
+			if (current != "" && current != nil)
+				length += 1
+				final_title << " "
+				final_title << current
+				previous = current
 			else
-				create_title(nextWord)
+				length = 19
 			end
-		# rescue
-		# 	puts "No next Word"
+		end
+		return final_title
+	rescue
+		return final_title
 	end
 end
 
@@ -144,8 +167,20 @@ def main_loop()
 	process_file(ARGV[0])
 
 	# Get user input
+	marker = 0
+	while (marker == 0)
+		print "Enter a word [Enter 'q' to quit]:"
+		line = STDIN.gets.chomp
+		if line == "q"
+			marker = 1
+		else
+			$createTitle = ""
+			$createCounter = 0
+			puts create_title(line)
+		end
+	end
 end
 
-if __FILE__==$0
+if __FILE__== $0
 	main_loop()
 end
